@@ -197,7 +197,7 @@ public async Task<IActionResult> UpdateJob(int id, JobRequestCreateDto dto)
 
     await _context.SaveChangesAsync();
 
-    return NoContent();
+    return Ok("updated successfully");
 }
 [HttpPatch("{id}")]
 public async Task<IActionResult> PatchJob(int id, JobRequestPatchDto dto)
@@ -229,7 +229,7 @@ public async Task<IActionResult> PatchJob(int id, JobRequestPatchDto dto)
     if (dto.DepartmentName != null) job.DepartmentName = dto.DepartmentName;
 
     await _context.SaveChangesAsync();
-    return NoContent();
+    return Ok("updated successfully");
 }
 
         // ✅ DELETE: DELETE /api/jobrequest/{id}
@@ -244,7 +244,7 @@ public async Task<IActionResult> DeleteJobRequest(int id)
     _context.JobRequests.Remove(job);
     await _context.SaveChangesAsync();
 
-    return NoContent(); // or return Ok("Deleted successfully");
+    return Ok("Job request deleted successfully.");; // or return Ok("Deleted successfully");
 }
 
     }
