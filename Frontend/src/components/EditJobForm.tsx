@@ -2,7 +2,9 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
+
 import InputField from './InputField';
 import TextAreaField from './TextAreaField';
 import Button from './Button';
@@ -32,7 +34,7 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onSuccess, onCancel }) =
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { errors },
   } = useForm<EditJobFormSchema>({
     resolver: zodResolver(jobSchema),
     defaultValues: {
@@ -48,20 +50,26 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onSuccess, onCancel }) =
     },
   });
 
-  const onSubmit = async (data: EditJobFormSchema) => {
-    try {
-      const res = await axios.put<Job>(`http://localhost:5095/api/JobRequest/${job.requestId}`, {
+  // ✅ Mutation for PUT request
+  const mutation = useMutation({
+    mutationFn: (data: EditJobFormSchema) =>
+      axios.put<Job>(`http://localhost:5095/api/JobRequest/${job.requestId}`, {
         ...job,
         ...data,
         minSalary: data.minSalary.toString(),
-        maxSalary: data.maxSalary.toString()
-      });
+        maxSalary: data.maxSalary.toString(),
+      }),
+    onSuccess: (res) => {
       onSuccess(res.data);
       alert('Job updated successfully.');
-    } catch (err) {
-      console.error('Update failed:', err);
+    },
+    onError: () => {
       alert('Failed to update job.');
-    }
+    },
+  });
+
+  const onSubmit = (data: EditJobFormSchema) => {
+    mutation.mutate(data);
   };
 
   return (
@@ -79,8 +87,8 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onSuccess, onCancel }) =
       <InputField label="Requester Name" {...register('requesterName')} error={errors.requesterName} />
 
       <div className="flex gap-4 mt-6">
-        <Button type="submit" className="bg-blue-600 hover:bg-blue-500 text-white" disabled={isSubmitting}>
-          {isSubmitting ? 'Saving...' : 'Save Changes'}
+        <Button type="submit" className="bg-blue-600 hover:bg-blue-500 text-white" disabled={mutation.isPending}>
+          {mutation.isPending ? 'Saving...' : 'Save Changes'}
         </Button>
         <Button type="button" onClick={onCancel} className="bg-gray-200 hover:bg-gray-300 text-black">
           Cancel
