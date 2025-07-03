@@ -15,6 +15,7 @@ namespace Backend.DTOs
 
         // ✅ Add the following:
         // public string Status { get; set; }               // Needed by controller (e.g., "Pending")
-        public DateTime RequestDate { get; set; }        // Needed to set creation date
+        public DateTime? RequestDate { get; set; }
+       // Needed to set creation date
     }
 }

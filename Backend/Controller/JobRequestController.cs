@@ -53,7 +53,7 @@ public async Task<ActionResult<JobRequest>> CreateJobRequest(JobRequestCreateDto
         RequesterName = dto.RequesterName,
         DepartmentName = dto.DepartmentName,
         Status = "Pending", // ✅ default status
-        RequestDate = DateTime.UtcNow // ✅
+        RequestDate = dto.RequestDate ?? DateTime.UtcNow // ✅
  // ✅ current timestamp
     };
 
