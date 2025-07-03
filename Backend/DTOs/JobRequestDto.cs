@@ -10,6 +10,7 @@ namespace Backend.DTOs
         public int MinExperience { get; set; }
         public string MinSalary { get; set; }
         public string MaxSalary { get; set; }
+        public string SalaryRange { get; set; }
 
         public string RequestedByName { get; set; }     // From User
         public string DepartmentName { get; set; }      // From Department

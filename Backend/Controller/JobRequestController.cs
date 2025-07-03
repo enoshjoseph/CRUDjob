@@ -87,6 +87,7 @@ public async Task<ActionResult<object>> GetAllJobs(int page = 1, int pageSize = 
             MinExperience = j.MinExperience,
             MinSalary = j.MinSalary,
             MaxSalary =   j.MaxSalary,
+            SalaryRange = $"{j.MinSalary}- {j.MaxSalary}",
             RequestedByName = j.RequesterName, // 👈 fix
             DepartmentName = j.DepartmentName,
             RequestDate = j.RequestDate,
@@ -121,6 +122,7 @@ public async Task<ActionResult<JobRequestDto>> GetJobById(int id)
             MinExperience = j.MinExperience,
             MinSalary = j.MinSalary,
             MaxSalary = j.MaxSalary,
+            SalaryRange = $"{j.MinSalary}- {j.MaxSalary}",
             RequestedByName = j.RequesterName,
             DepartmentName = j.DepartmentName,
             RequestDate = j.RequestDate,
