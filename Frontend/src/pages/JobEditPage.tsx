@@ -3,7 +3,7 @@ import axios from 'axios';
 import clsx from 'clsx';
 import type { Job, JobStatus } from '../types/details';
 import JobCard from '../components/JobCard';
-import JobDetails from '../components/JobDetails';
+import EditJobForm from '../components/EditJobForm';
 import Button from '../components/Button';
 
 interface ApiResponse {
@@ -14,7 +14,7 @@ interface ApiResponse {
   data: Job[];
 }
 
-const JobUpdatePage: React.FC = () => {
+const JobEditPage: React.FC = () => {
   const [jobs, setJobs] = useState<Job[]>([]);
   const [selectedStatus, setSelectedStatus] = useState<JobStatus>('Pending');
   const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
@@ -39,27 +39,20 @@ const JobUpdatePage: React.FC = () => {
     fetchJobs();
   }, [currentPage]);
 
-  const handleDelete = async (jobId: number) => {
-    const confirmed = window.confirm('Are you sure you want to delete this job request?');
-    if (!confirmed) return;
-
-    try {
-      await axios.delete(`http://localhost:5095/api/JobRequest/${jobId}`);
-      setJobs((prev) => prev.filter((job) => job.requestId !== jobId));
-      if (selectedJobId === jobId) setSelectedJobId(null);
-      alert('Job deleted successfully.');
-    } catch (error) {
-      console.error('Delete error:', error);
-      alert('Failed to delete job.');
-    }
+  const handleUpdateSuccess = (updatedJob: Job) => {
+    setJobs((prevJobs) =>
+      prevJobs.map((job) =>
+        job.requestId === updatedJob.requestId ? updatedJob : job
+      )
+    );
+    setSelectedJobId(null);
   };
 
   const filteredJobs = jobs.filter((job) => job.status === selectedStatus);
-  const selectedJob = jobs.find((job) => job.requestId === selectedJobId);
 
   return (
     <div className="max-w-5xl mx-auto p-6">
-      <h2 className="text-2xl font-bold mb-6">Job Requests</h2>
+      <h2 className="text-2xl font-bold mb-6">Edit Job Requests</h2>
 
       {/* Filter Buttons */}
       <div className="mb-4 flex gap-3">
@@ -87,19 +80,25 @@ const JobUpdatePage: React.FC = () => {
         </Button>
       </div>
 
-      {/* Job Cards */}
+      {/* Job Cards or Edit Form */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {filteredJobs.length === 0 ? (
           <p className="text-gray-500">No jobs found with status "{selectedStatus}".</p>
         ) : (
-          filteredJobs.map((job) => (
-            <JobCard
-              key={job.requestId}
-              job={job}
-              onClick={() => setSelectedJobId(job.requestId)}
-              onDelete={() => handleDelete(job.requestId)}
-            />
-          ))
+          filteredJobs.map((job) =>
+            job.requestId === selectedJobId ? (
+              <div key={job.requestId} className="col-span-1 md:col-span-2">
+                <EditJobForm job={job} onSuccess={handleUpdateSuccess} onCancel={() => setSelectedJobId(null)} />
+              </div>
+            ) : (
+              <JobCard
+                key={job.requestId}
+                job={job}
+                onClick={() => setSelectedJobId(job.requestId)}
+                showEditOnly
+              />
+            )
+          )
         )}
       </div>
 
@@ -136,11 +135,8 @@ const JobUpdatePage: React.FC = () => {
           Next
         </button>
       </div>
-
-      {/* Full Details */}
-      {selectedJob && <JobDetails job={selectedJob} />}
     </div>
   );
 };
 
-export default JobUpdatePage;
+export default JobEditPage;
