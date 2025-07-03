@@ -10,6 +10,7 @@ export interface Job {
   positionCount: number;
   minQualification: string;
   minExperience: number;
-  salaryRange: string;
+  minSalary: string;
+  maxSalary: string;
   requestDate: string;
 }

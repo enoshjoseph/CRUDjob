@@ -16,7 +16,7 @@ const JobDetails: React.FC<JobDetailsProps> = ({ job }) => {
       <p><strong>Position Count:</strong> {job.positionCount}</p>
       <p><strong>Minimum Qualification:</strong> {job.minQualification}</p>
       <p><strong>Experience:</strong> {job.minExperience} years</p>
-      <p><strong>Salary:</strong> ₹{job.salaryRange}</p>
+      <p><strong>Salary:</strong> ₹{job.minSalary}-₹{job.maxSalary}</p>
       <p><strong>Requested On:</strong> {new Date(job.requestDate).toLocaleDateString()}</p>
     </div>
   );
