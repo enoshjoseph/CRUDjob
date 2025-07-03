@@ -3472,19 +3472,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Athira K Dinesan\\.nuget\\packages\\": {}
+    "C:\\Users\\enosh\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "F:\\TeachNote_Internship\\Temp Folder\\CRUDjob\\backend\\Backend.csproj",
+      "projectUniqueName": "C:\\Users\\enosh\\Downloads\\CRUDjob\\Backend\\Backend.csproj",
       "projectName": "Backend",
-      "projectPath": "F:\\TeachNote_Internship\\Temp Folder\\CRUDjob\\backend\\Backend.csproj",
-      "packagesPath": "C:\\Users\\Athira K Dinesan\\.nuget\\packages\\",
-      "outputPath": "F:\\TeachNote_Internship\\Temp Folder\\CRUDjob\\backend\\obj\\",
+      "projectPath": "C:\\Users\\enosh\\Downloads\\CRUDjob\\Backend\\Backend.csproj",
+      "packagesPath": "C:\\Users\\enosh\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\enosh\\Downloads\\CRUDjob\\Backend\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Athira K Dinesan\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\enosh\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net8.0"
@@ -3555,7 +3555,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.411/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.410/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
