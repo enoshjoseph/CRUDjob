@@ -1,3 +1,11 @@
+C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.csproj.AssemblyReference.cache
+C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.AssemblyInfoInputs.cache
+C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.AssemblyInfo.cs
+C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.csproj.CoreCompileInputs.cache
+C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.MvcApplicationPartsAssemblyInfo.cs
+C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.sourcelink.json
 C:\Users\enosh\Downloads\CRUDjob\Backend\bin\Debug\net8.0\appsettings.Development.json
 C:\Users\enosh\Downloads\CRUDjob\Backend\bin\Debug\net8.0\appsettings.json
 C:\Users\enosh\Downloads\CRUDjob\Backend\bin\Debug\net8.0\Backend.exe
@@ -115,14 +123,6 @@ C:\Users\enosh\Downloads\CRUDjob\Backend\bin\Debug\net8.0\tr\Microsoft.CodeAnaly
 C:\Users\enosh\Downloads\CRUDjob\Backend\bin\Debug\net8.0\zh-Hans\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 C:\Users\enosh\Downloads\CRUDjob\Backend\bin\Debug\net8.0\zh-Hant\Microsoft.CodeAnalysis.Workspaces.MSBuild.BuildHost.resources.dll
 C:\Users\enosh\Downloads\CRUDjob\Backend\bin\Debug\net8.0\runtimes\browser\lib\net8.0\System.Text.Encodings.Web.dll
-C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.csproj.AssemblyReference.cache
-C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.GeneratedMSBuildEditorConfig.editorconfig
-C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.AssemblyInfoInputs.cache
-C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.AssemblyInfo.cs
-C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.csproj.CoreCompileInputs.cache
-C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.MvcApplicationPartsAssemblyInfo.cs
-C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.MvcApplicationPartsAssemblyInfo.cache
-C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\Backend.sourcelink.json
 C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\staticwebassets.development.json
 C:\Users\enosh\Downloads\CRUDjob\Backend\obj\Debug\net8.0\staticwebassets\msbuild.Backend.Microsoft.AspNetCore.StaticWebAssets.props

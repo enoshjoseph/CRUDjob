@@ -7,11 +7,14 @@ namespace Backend.DTOs
         public int PositionCount { get; set; }
         public string MinQualification { get; set; }
         public int MinExperience { get; set; }
-        public string SalaryRange { get; set; }
+        public string MinSalary { get; set; }
+        public string MaxSalary { get; set; }
 
-        public int RequestedBy { get; set; }
-        public int DepartmentId { get; set; }
+        public string RequesterName { get; set; }
+        public string DepartmentName { get; set; }
 
-        public string Status { get; set; } = "Pending";
+        // ✅ Add the following:
+        // public string Status { get; set; }               // Needed by controller (e.g., "Pending")
+        public DateTime RequestDate { get; set; }        // Needed to set creation date
     }
 }
