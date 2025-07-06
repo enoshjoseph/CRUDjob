@@ -1,6 +1,4 @@
 import React, { useState } from 'react';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import axios from 'axios';
 import clsx from 'clsx';
 
 import JobCard from '../components/JobCard';
@@ -10,44 +8,31 @@ import Button from '../components/Button';
 import type { JobStatus } from '../types/details';
 import type { ApiResponse } from '../types/ApiResponse';
 
+import { useGetQuery } from '../features/useGetQuery';
+import { useDeleteMutation } from '../features/useDeleteMutation';
+
 const pageSize=2;
-
-// Fetch jobs (pagination supported)
-const fetchJobs = async (page: number): Promise<ApiResponse> => {
-  const res = await axios.get<ApiResponse>(
-    `http://localhost:5095/api/JobRequest?page=${page}&pageSize=${pageSize}`
-  );
-  return res.data;
-};
-
-// Delete API
-const deleteJob = async (jobId: number) => {
-  await axios.delete(`http://localhost:5095/api/JobRequest/${jobId}`);
-};
 
 const JobUpdatePage: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<JobStatus>('Pending');
   const [selectedJobId, setSelectedJobId] = useState<number | null>(null);
   const [currentPage, setCurrentPage] = useState<number>(1);
 
-  const queryClient = useQueryClient();
-
   // UseQuery with caching optimization
-  const { data, isLoading, isError } = useQuery<ApiResponse, Error>({
-    queryKey: ['jobs', currentPage],
-    queryFn: () => fetchJobs(currentPage),
-    staleTime: 1000 * 120,
-    refetchOnWindowFocus: false,
-  });
+  const { data, isLoading, isError } = useGetQuery<ApiResponse>(
+    ['jobs',currentPage],
+    currentPage,
+    pageSize,
+    {staleTime: 1000 * 120,
+    refetchOnWindowFocus: false}
+  );
 
   // Delete Mutation
-  const mutation = useMutation({
-    mutationFn: deleteJob,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['jobs', currentPage] });
-      setSelectedJobId(null);
-    },
-  });
+  const mutation = useDeleteMutation({
+    entity: 'JobRequest',
+    key: ['jobs', currentPage],
+    onSuccessFn: ()=>setSelectedJobId(null),
+});
 
   // Handle Delete
   const handleDelete = async (jobId: number) => {
@@ -55,7 +40,6 @@ const JobUpdatePage: React.FC = () => {
       'Are you sure you want to delete this job request?'
     );
     if (!confirmed) return;
-
     mutation.mutate(jobId);
   };
 

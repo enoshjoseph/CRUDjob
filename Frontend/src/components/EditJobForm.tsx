@@ -1,8 +1,6 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
-import axios from 'axios';
 
 import InputField from './InputField';
 import TextAreaField from './TextAreaField';
@@ -12,6 +10,8 @@ import type { Job } from '../types/details';
 
 import type { jobFormData } from '../schema/jobSchema';
 import { jobSchema } from '../schema/jobSchema';
+
+import { usePutMutation } from '../features/usePutMutation';
 
 interface EditJobFormProps {
   job: Job;
@@ -40,30 +40,19 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onSuccess, onCancel }) =
   });
 
   // ✅ Mutation for PUT request
-  const mutation = useMutation({
-    mutationFn: (data: jobFormData) =>
-      axios.put<Job>(`http://localhost:5095/api/JobRequest/${job.requestId}`, {
-        ...job,
-        ...data,
-        minSalary: data.minSalary.toString(),
-        maxSalary: data.maxSalary.toString(),
-      }),
-    onSuccess: (res) => {
-      onSuccess(res.data);
-      alert('Job updated successfully.');
-    },
-    onError: (error:any) => {
-      const backendMessage = error?.response?.data || 'Failed to Edit job request';
-      if(typeof backendMessage=='string'){
-        alert(backendMessage);
-      }else{
-        alert(backendMessage.errors.MaxSalary[0]);
-      }
-    },
+  const mutation = usePutMutation({
+    entity: 'JobRequest',
+    key: ['jobs'],
+    onSuccessFn: ()=>onSuccess(job)
   });
 
   const onSubmit = (data: jobFormData) => {
-    mutation.mutate(data);
+    mutation.mutate({ 
+      id: job.requestId,
+      ...data,
+      minSalary: data.minSalary.toString(),
+      maxSalary: data.maxSalary.toString(),
+    });
   };
 
   return (

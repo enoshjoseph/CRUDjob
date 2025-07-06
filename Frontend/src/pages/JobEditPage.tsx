@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
 import {
-  useQuery,
   useQueryClient,
 } from '@tanstack/react-query';
-import axios from 'axios';
 import clsx from 'clsx';
 
 import JobCard from '../components/JobCard';
@@ -13,14 +11,10 @@ import Button from '../components/Button';
 import type { Job, JobStatus } from '../types/details';
 import type { ApiResponse } from '../types/ApiResponse';
 
-const pageSize=2;
+import { useGetQuery } from '../features/useGetQuery';
 
-const fetchJobs = async (page: number): Promise<ApiResponse> => {
-  const res = await axios.get<ApiResponse>(
-    `http://localhost:5095/api/JobRequest?page=${page}&pageSize=${pageSize}`
-  );
-  return res.data;
-};
+
+const pageSize=2;
 
 const JobEditPage: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState<JobStatus>('Pending');
@@ -29,12 +23,13 @@ const JobEditPage: React.FC = () => {
 
   const queryClient = useQueryClient();
 
-  const { data, isLoading, isError } = useQuery<ApiResponse, Error>({
-    queryKey: ['jobs', currentPage],
-    queryFn: () => fetchJobs(currentPage),
-    staleTime: 1000*120,
-    refetchOnWindowFocus: false
-  });
+  const { data, isLoading, isError } = useGetQuery<ApiResponse>(
+    ['jobs', currentPage],
+    currentPage,
+    pageSize,
+    {staleTime: 1000*120,
+    refetchOnWindowFocus: false}
+  );
 
   const handleUpdateSuccess = (updatedJob: Job) => {
     queryClient.setQueryData<ApiResponse>(['jobs', currentPage], (oldData) => {

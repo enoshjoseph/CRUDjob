@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import JobRequestPage from './pages/JobRequestPage';
-import JobUpdatePage from './pages/JobUpdatePage';
+import JobUpdatePage from './pages/JobDeletePage';
 import JobEditPage from './pages/JobEditPage';
 import JobNavigationPage from './pages/JobNavigationPage';
 
