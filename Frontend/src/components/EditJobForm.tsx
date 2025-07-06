@@ -1,6 +1,5 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -8,21 +7,11 @@ import axios from 'axios';
 import InputField from './InputField';
 import TextAreaField from './TextAreaField';
 import Button from './Button';
+
 import type { Job } from '../types/details';
 
-const jobSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().min(1, 'Description is required'),
-  positionCount: z.number().min(1, 'At least 1 position is required'),
-  minQualification: z.string().min(1, 'Minimum qualification is required'),
-  minExperience: z.number().min(0, 'Experience cannot be negative'),
-  minSalary: z.number().min(0, 'Minimum salary is required'),
-  maxSalary: z.number().min(0, 'Maximum salary is required'),
-  departmentName: z.string().min(1, 'Department is required'),
-  requesterName: z.string().min(1, 'Requester name is required'),
-});
-
-type EditJobFormSchema = z.infer<typeof jobSchema>;
+import type { jobFormData } from '../schema/jobSchema';
+import { jobSchema } from '../schema/jobSchema';
 
 interface EditJobFormProps {
   job: Job;
@@ -35,7 +24,7 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onSuccess, onCancel }) =
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<EditJobFormSchema>({
+  } = useForm<jobFormData>({
     resolver: zodResolver(jobSchema),
     defaultValues: {
       title: job.title,
@@ -52,7 +41,7 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onSuccess, onCancel }) =
 
   // ✅ Mutation for PUT request
   const mutation = useMutation({
-    mutationFn: (data: EditJobFormSchema) =>
+    mutationFn: (data: jobFormData) =>
       axios.put<Job>(`http://localhost:5095/api/JobRequest/${job.requestId}`, {
         ...job,
         ...data,
@@ -63,12 +52,17 @@ const EditJobForm: React.FC<EditJobFormProps> = ({ job, onSuccess, onCancel }) =
       onSuccess(res.data);
       alert('Job updated successfully.');
     },
-    onError: () => {
-      alert('Failed to update job.');
+    onError: (error:any) => {
+      const backendMessage = error?.response?.data || 'Failed to Edit job request';
+      if(typeof backendMessage=='string'){
+        alert(backendMessage);
+      }else{
+        alert(backendMessage.errors.MaxSalary[0]);
+      }
     },
   });
 
-  const onSubmit = (data: EditJobFormSchema) => {
+  const onSubmit = (data: jobFormData) => {
     mutation.mutate(data);
   };
 

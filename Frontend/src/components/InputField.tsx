@@ -8,23 +8,27 @@ interface InputFieldProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: FieldError;
 }
 
-const InputField: React.FC<InputFieldProps> = ({ label, error, className, ...props }) => {
-  return (
-    <div>
-      <label className="block text-sm font-medium">{label}</label>
-      <input
-        className={twMerge(
-          clsx(
-            'mt-1 w-full border rounded px-3 py-2',
-            error && 'border-red-500',
-            className
-          )
-        )}
-        {...props}
-      />
-      {error && <p className="text-red-500 text-sm">{error.message}</p>}
-    </div>
-  );
-};
+const InputField = React.forwardRef<HTMLInputElement,InputFieldProps>(({ label, error, className, ...props },ref) => {
+    return (
+      <div>
+        <label className="block text-sm font-medium">{label}</label>
+        <input
+          ref={ref}
+          className={twMerge(
+            clsx(
+              'mt-1 w-full border rounded px-3 py-2',
+              error && 'border-red-500',
+              className
+            )
+          )}
+          {...props}
+        />
+        {error && <p className="text-red-500 text-sm">{error.message}</p>}
+      </div>
+    );
+  }
+);
+
+InputField.displayName='InputField';
 
 export default InputField;

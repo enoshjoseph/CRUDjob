@@ -1,3 +1,4 @@
+
 export type JobStatus = 'Approved' | 'Pending';
 
 export interface Job {

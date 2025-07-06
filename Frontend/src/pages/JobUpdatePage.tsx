@@ -1,28 +1,26 @@
 import React, { useState } from 'react';
-import {useQuery,useMutation,useQueryClient} from '@tanstack/react-query';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import axios from 'axios';
 import clsx from 'clsx';
 
-import type { Job, JobStatus } from '../types/details';
 import JobCard from '../components/JobCard';
 import JobDetails from '../components/JobDetails';
 import Button from '../components/Button';
 
-interface ApiResponse {
-  currentPage: number;
-  pageSize: number;
-  totalItems: number;
-  totalPages: number;
-  data: Job[];
-}
+import type { JobStatus } from '../types/details';
+import type { ApiResponse } from '../types/ApiResponse';
 
+const pageSize=2;
+
+// Fetch jobs (pagination supported)
 const fetchJobs = async (page: number): Promise<ApiResponse> => {
   const res = await axios.get<ApiResponse>(
-    `http://localhost:5095/api/JobRequest?page=${page}&pageSize=2`
+    `http://localhost:5095/api/JobRequest?page=${page}&pageSize=${pageSize}`
   );
   return res.data;
 };
 
+// Delete API
 const deleteJob = async (jobId: number) => {
   await axios.delete(`http://localhost:5095/api/JobRequest/${jobId}`);
 };
@@ -34,20 +32,24 @@ const JobUpdatePage: React.FC = () => {
 
   const queryClient = useQueryClient();
 
-  // Typed query with UseQueryResult<ApiResponse, Error>
-const { data, isLoading, isError } = useQuery<ApiResponse, Error>({
-  queryKey: ['jobs', currentPage],
-  queryFn: () => fetchJobs(currentPage),
-});
+  // UseQuery with caching optimization
+  const { data, isLoading, isError } = useQuery<ApiResponse, Error>({
+    queryKey: ['jobs', currentPage],
+    queryFn: () => fetchJobs(currentPage),
+    staleTime: 1000 * 120,
+    refetchOnWindowFocus: false,
+  });
 
+  // Delete Mutation
   const mutation = useMutation({
     mutationFn: deleteJob,
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['jobs', currentPage] as const });
+      queryClient.invalidateQueries({ queryKey: ['jobs', currentPage] });
       setSelectedJobId(null);
     },
   });
 
+  // Handle Delete
   const handleDelete = async (jobId: number) => {
     const confirmed = window.confirm(
       'Are you sure you want to delete this job request?'
@@ -57,6 +59,7 @@ const { data, isLoading, isError } = useQuery<ApiResponse, Error>({
     mutation.mutate(jobId);
   };
 
+  // Filter jobs by selected status
   const filteredJobs = data?.data.filter((job) => job.status === selectedStatus) || [];
   const selectedJob = data?.data.find((job) => job.requestId === selectedJobId) || null;
 
@@ -150,7 +153,7 @@ const { data, isLoading, isError } = useQuery<ApiResponse, Error>({
         </div>
       )}
 
-      {/* Full Job Details */}
+      {/* Full Details */}
       {selectedJob && <JobDetails job={selectedJob} />}
     </div>
   );

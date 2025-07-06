@@ -1,6 +1,5 @@
 import React from 'react';
 import { useForm } from 'react-hook-form';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import axios from 'axios';
@@ -9,19 +8,8 @@ import InputField from '../components/InputField';
 import TextAreaField from '../components/TextAreaField';
 import Button from '../components/Button';
 
-const jobRequestSchema = z.object({
-  title: z.string().min(1, 'Title is required'),
-  description: z.string().min(1, 'Description is required'),
-  positionCount: z.number().min(1, 'At least 1 position'),
-  minQualification: z.string().min(1, 'Minimum qualification is required'),
-  minExperience: z.number().min(0, 'Experience cannot be negative'),
-  minSalary: z.number().min(0, 'Minimum salary cannot be negative'),
-  maxSalary: z.number().min(0, 'Maximum salary cannot be negative'),
-  requesterName: z.string().min(1, 'Requester name is required'),
-  departmentName: z.string().min(1, 'Department name is required'),
-});
-
-type JobRequestFormData = z.infer<typeof jobRequestSchema>;
+import type {jobFormData} from '../schema/jobSchema';
+import {jobSchema} from '../schema/jobSchema';
 
 const JobRequestPage: React.FC = () => {
   const {
@@ -29,31 +17,39 @@ const JobRequestPage: React.FC = () => {
     handleSubmit,
     formState: { errors },
     reset
-  } = useForm<JobRequestFormData>({
-    resolver: zodResolver(jobRequestSchema),
+  } = useForm<jobFormData>({
+    resolver: zodResolver(jobSchema),
   });
 
   // ✅ Mutation hook for form submission
   const mutation = useMutation({
-    mutationFn: (data: JobRequestFormData) => {
+    mutationFn: (data: jobFormData) => {
       const payload = {
         ...data,
         minSalary: data.minSalary.toString(),
         maxSalary: data.maxSalary.toString(),
         requestDate: new Date().toISOString(),
       };
-      return axios.post('http://localhost:5095/api/JobRequest', payload);
+      const res= axios.post('http://localhost:5095/api/JobRequest', payload);
+      console.log("Details:"+res);
+      return res
     },
     onSuccess: () => {
       alert('Job request submitted successfully!');
       reset(); // Reset the form after success
     },
-    onError: () => {
-      alert('Failed to submit job request');
-    },
+    onError: (error: any) => {
+      const backendMessage = error?.response?.data || 'Failed to submit job request';
+      if(typeof backendMessage=='string'){
+        console.log(backendMessage);
+        alert(backendMessage);
+      }else{
+        alert(backendMessage.errors.MaxSalary[0]||backendMessage);
+      }
+    }
   });
 
-  const onSubmit = (data: JobRequestFormData) => {
+  const onSubmit = (data: jobFormData) => {
     mutation.mutate(data); // Trigger the mutation
   };
 

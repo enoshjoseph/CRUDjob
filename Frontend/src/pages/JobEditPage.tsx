@@ -6,22 +6,18 @@ import {
 import axios from 'axios';
 import clsx from 'clsx';
 
-import type { Job, JobStatus } from '../types/details';
 import JobCard from '../components/JobCard';
 import EditJobForm from '../components/EditJobForm';
 import Button from '../components/Button';
 
-interface ApiResponse {
-  currentPage: number;
-  pageSize: number;
-  totalItems: number;
-  totalPages: number;
-  data: Job[];
-}
+import type { Job, JobStatus } from '../types/details';
+import type { ApiResponse } from '../types/ApiResponse';
+
+const pageSize=2;
 
 const fetchJobs = async (page: number): Promise<ApiResponse> => {
   const res = await axios.get<ApiResponse>(
-    `http://localhost:5095/api/JobRequest?page=${page}&pageSize=2`
+    `http://localhost:5095/api/JobRequest?page=${page}&pageSize=${pageSize}`
   );
   return res.data;
 };
@@ -35,7 +31,9 @@ const JobEditPage: React.FC = () => {
 
   const { data, isLoading, isError } = useQuery<ApiResponse, Error>({
     queryKey: ['jobs', currentPage],
-    queryFn: () => fetchJobs(currentPage)
+    queryFn: () => fetchJobs(currentPage),
+    staleTime: 1000*120,
+    refetchOnWindowFocus: false
   });
 
   const handleUpdateSuccess = (updatedJob: Job) => {
